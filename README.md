@@ -6,8 +6,10 @@ This is a simple user management RESTful API built using Node.js, Express, and K
 
 ## Features
 
-- Create a new user by sending a POST request to the `/api/v1/users` endpoint.
-- Retrieve a list of all users by sending a GET request to the `/api/v1/users` endpoint.
+- Create a new user with hashed password.
+- Login with JWT Authentication.
+- Update and Delete user.
+- Retrieve a list of all users.
 - Uses Knex.js for database connection and query building.
 
 ---
@@ -27,6 +29,9 @@ This is a simple user management RESTful API built using Node.js, Express, and K
 |------------|----------------------------|--------------------------------------------------|
 | **POST**   | `/api/v1/users`            | Create a new user                                |
 | **GET**    | `/api/v1/users`            | Get a list of all users                          |
+| **DELETE**    | `/api/v1/users/:id`            | Delete user                         |
+| **GET**    | `/api/v1/users/:id`            | Get specific user                        |
+| **POST**    | `/api/v1/users/login`            | Login with email and password                        |
 
 ---
 
@@ -40,7 +45,8 @@ The API uses a `users` table to store user data. Below is the schema for the `us
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     age INT CHECK (age >= 0), 
-    user_email VARCHAR(100) UNIQUE NOT NULL
+    user_email VARCHAR(100) UNIQUE NOT NULL,
+    hashed_password VARCHAR (100)
 );*/
 ```
 
@@ -71,6 +77,9 @@ Ensure you have the following installed:
    npm install express
    npm install knex --save
    npm install mysql2
+   npm install jsonwebtoken
+   npm install dotenv
+   npm install bcrypt
    ```
 3. Start the Server
    ```bash

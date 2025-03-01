@@ -2,6 +2,7 @@ const UserRepositories = require('../repositories/user_repositories');
 const UserEntity = require('../entity/UserEntity');
 const Hash  = require('../utils/hash');
 const jwt = require('../utils/jwt');
+const errMessage = require('../constant/err-message');
 
 
 class UserService {
@@ -61,13 +62,13 @@ class UserService {
         const user = await this.UserRepositories.GetUserEmail(email);
     
         if (!user) {
-            throw new Error('User not found');
+            throw new Error(errMessage.errNotFound);
         }
     
         const isPasswordValid = await Hash.verifyPassword(password, user.hash_password);
     
         if (!isPasswordValid) {
-            throw new Error('Invalid password');
+            throw new Error(errMessage.errPassword);
         }
 
         /*
@@ -80,4 +81,4 @@ class UserService {
     
 }
 
-module.exports = UserService;  // ✅ Export class, not an instance
+module.exports = UserService;  

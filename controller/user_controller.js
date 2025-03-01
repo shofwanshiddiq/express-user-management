@@ -1,4 +1,7 @@
 const UserService = require('../service/user_service');
+const jwt = require('../utils/jwt');
+const errMessage = require('../constant/err-message');
+const BaseResponse = require('../utils/base-reponse');
 
 class UserController {
     constructor() {
@@ -65,11 +68,38 @@ class UserController {
     async LoginUser(req, res) {
         try {
             const users = await this.userService.LoginUser(req.body.email, req.body.password);
-            res.status(200).json({ message: "success login", data: users });
+    
+            if (!users) {
+                return res.status(401).json({ message: "Invalid email or password" });
+            }
+    
+            // Generate JWT token
+            const token = await jwt.generateToken({ id: users.id, email: users.email });
+    
+            // Set token in HTTP-only cookie
+            res.cookie('token', token, {  
+                httpOnly: true,
+                secure: true,  
+                sameSite: 'none',  
+                maxAge: 1000 * 60 * 60 * 24 // 1 day expiration
+            });
+    
+            res.json(BaseResponse.success("Success login", users));
         } catch (e) {
-            res.status(500).json({ message: 'Something went wrong', error: e.message });
+            return res.json(BaseResponse.error(e.message));
+            // switch (e.message) {
+            //     case errMessage.errNotFound:
+            //         res.status(404).json({ message: errMessage.errNotFound });
+            //         break;
+            //     case errMessage.errPassword:
+            //         res.status(401).json({ message: errMessage.errPassword });
+            //         break;
+            //     default:
+            //         res.status(500).json({ message: "Something went wrong", error: e.message });
+            // }
         }
-    }
+    }    
+    
     
 }
 

@@ -50,6 +50,20 @@ The API uses a `users` table to store user data. Below is the schema for the `us
 );*/
 ```
 
+## Security Layer
+
+### Input 
+* Middleware for JWT Authentication
+* Hashed Password using bcrpyt 
+* Role Authorization for specific endpoint
+* Content Type Validation 
+
+### Output Header
+* X-Frame Options Deny: prevents the page from being displayed in an iframe
+* X-Content-Type-Options: nosniff: prevent MIME type sniffing attacks
+* Content Security Policy: prevent loading from external resources, and only allows script, styles, and images only form the same origin
+* Remove X-Powered By
+
 ## Getting Started
 
 Follow these steps to set up and run the API locally.
@@ -80,6 +94,7 @@ Ensure you have the following installed:
    npm install jsonwebtoken
    npm install dotenv
    npm install bcrypt
+   npm install helmet
    ```
 3. Start the Server
    ```bash
